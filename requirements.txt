@@ -1,0 +1,4 @@
+fastapi[standart]
+pydantic-settings
+sqlalchemy
+sqlalchemy-utils
