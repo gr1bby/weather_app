@@ -2,3 +2,6 @@ fastapi[standart]
 pydantic-settings
 sqlalchemy
 sqlalchemy-utils
+uvicorn[standart]
+requests
+psycopg[binary]

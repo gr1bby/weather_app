@@ -13,3 +13,5 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+OPEN_WEATHER_API_BASE_URL = "http://api.openweathermap.org/data/2.5/weather"

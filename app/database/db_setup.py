@@ -3,7 +3,8 @@ from sqlalchemy.orm import sessionmaker, scoped_session, Session
 from sqlalchemy.engine.base import Engine
 from sqlalchemy_utils import create_database, database_exists
 
-from db_config import db_config
+from app.database.db_config import db_config
+from app.core.logger import logger
 
 
 class DatabaseSetup:
@@ -17,7 +18,9 @@ class DatabaseSetup:
         Args:
             engine (Engine): Engine of submitted databse.
         """
+        logger.info("Creating database tables...")
         db_config.Base.metadata.create_all(engine)
+        logger.info("Tables created successfully.")
 
     def create_engine(self) -> Engine:
         """
@@ -27,9 +30,17 @@ class DatabaseSetup:
             Engine: Engine of database.
         """
         url = db_config.DATABASE_URL
+
         if not database_exists(url):
+            logger.info("Database does not exist. Creating...")
             create_database(url)
-        return create_engine(url, echo=True)
+            logger.info("Database created.")
+        else:
+            logger.info("Database already exists.")
+        
+        engine = create_engine(url, echo=True)
+        logger.info("Database engine created.")
+        return engine
 
     def create_session(self, engine: Engine) -> scoped_session[Session]:
         """
@@ -41,4 +52,7 @@ class DatabaseSetup:
         Returns:
             scoped_session[Session]: Current Session object.
         """
-        return scoped_session(sessionmaker(bind=engine))
+        logger.info("Creating database session...")
+        session = scoped_session(sessionmaker(bind=engine))
+        logger.info("Session created.")
+        return session
